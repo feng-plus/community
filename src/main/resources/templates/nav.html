@@ -1,0 +1,55 @@
+<!--注意：引入thymeleaf的名称空间-->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>公共导航条</title>
+</head>
+<body>
+<div th:fragment="navbar">
+    <nav class="navbar navbar-expand-sm navbar-light bg-light">
+        <div class="container-fluid">
+            <!--<span class="navbar-brand h1 mb-0">网战天下</span>-->
+            <a href="#" class="navbar-brand">
+                <img src="images/logo.png" class="d-inline-block align-top" style="width: 30px;height: 30px">
+                <p class="d-inline-block">麻酱社区</p>
+            </a>
+            <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <form action="" class="form-inline ml-5">
+                    <input type="text" class="form-control mr-sm-2" placeholder="请输入关键字">
+                    <button class="btn btn-outline-success my-2 my-md-0">搜索</button>
+                </form>
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item" th:if="${session.githubUser eq null}">
+                        <a href="https://github.com/login/oauth/authorize?client_id=84992e10b66d7c1c488e&redirect_uri=http://localhost:8887/callback&state=1" class="nav-link btn-primary mr-5" style="font-size: 20px">登录</a>
+                    </li>
+                    <li class="nav-item mr-1" th:if="${session.githubUser ne null}">
+                        <a href="/publish" class="nav-link">
+                            <i class="fa fa-plus-square" aria-hidden="true" style="font-size:20px;color:#F00;"></i>
+                            <span style="font-size:20px;">发起</span>
+                        </a>
+                    </li>
+                    <li class="nav-item mr-5" th:if="${session.githubUser ne null}">
+                        <div class="dropdown">
+                            <button class="nav-link btn dropdown-toggle" data-toggle="dropdown"
+                                    th:text="${session.githubUser.getName()}  " style="font-size: 20px">我
+                            </button>
+                            <div class="dropdown-menu show">
+                                <a href="#" class="dropdown-item">我的问题</a>
+                                <a href="#" class="dropdown-item">我的提问</a>
+                                <a href="#" class="dropdown-item">我的关注</a>
+                            </div>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>
+
+</body>
+</html>
