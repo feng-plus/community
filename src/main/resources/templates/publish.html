@@ -5,19 +5,39 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>麻酱社区首页</title>
+    <title>麻酱社区发布</title>
     <link rel="stylesheet" href="css/bootstrap.min.css"/>
     <link rel="stylesheet" href="css/font-awesome.min.css"/>
 </head>
-<body>
+<body class="bg-secondary">
 <div th:replace="nav::navbar"></div>
-<div class="container-fluid">
+<div class="container-fluid m-5 bg-light h-100" >
    <div class="row">
        <div class="col-lg-9 col-md-12 col-sm-12">
-
+           <h2><i class="fa fa-plus-circle" aria-hidden="true" style="font-size: 30px"></i>发起</h2>
+           <hr>
+           <form action="/publish" method="post" novalidate class="needs-validation">
+               <div class="form-group">
+                   <label for="title">问题标题(简单扼要):</label>
+                   <input  id="title" name="title" type="text" class="form-control" th:value="${title}" placeholder="问题标题..." required>
+                   <div class="invalid-feedback">问题标题未输入!</div>
+               </div>
+               <div class="form-group">
+                   <label for="description">问题补充（必填，请参照右侧提示）:</label>
+                   <textarea id="description" name="description" class="form-control" th:text="${description}" cols="30" rows="20" required></textarea>
+                   <div class="invalid-feedback">问题补充未输入!</div>
+               </div>
+               <div class="form-group">
+                   <label>添加标签:</label>
+                   <input id="tag" name="tag" type="text" class="form-control" th:value="${tag}" placeholder="输入标签以逗号,隔开" required>
+                   <div class="invalid-feedback">标签补充未输入!</div>
+               </div>
+               <span th:text="${error}" class="text-danger" th:if="${error != null}"></span>
+               <button type="submit" class="btn btn-success float-right">发布</button>
+           </form>
        </div>
        <div class="col-lg-3 col-md-12 col-sm-12">
-
+          <h3>问题发起指南</h3>
        </div>
    </div>
 </div>
@@ -25,5 +45,24 @@
 </body>
 <script src="js/jquery.min.js" type="application/javascript"></script>
 <script src="js/bootstrap.bundle.min.js" type="application/javascript"></script>
-
+<script>
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+    (function() {
+        'use strict';
+        window.addEventListener('load', function() {
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+            // Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function(form) {
+                form.addEventListener('submit', function(event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+</script>
 </html>

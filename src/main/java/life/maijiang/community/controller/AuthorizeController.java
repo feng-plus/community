@@ -46,7 +46,7 @@ public class AuthorizeController {
         //携带access_toke发起get请求
         GithubUser githubUser = githubProvider.getGithubUser(accessToken);
         //将得到的用户信息存入session
-        if(githubUser != null){
+        if(githubUser != null && githubUser.getId() != null){
             //创建用户，存入数据库
             User user = new User();
             user.setAccountId(String.valueOf(githubUser.getId()));
