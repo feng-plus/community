@@ -5,20 +5,20 @@ import org.springframework.boot.autoconfigure.web.servlet.WebMvcAutoConfiguratio
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 /***
  * 拦截器配置
  */
 @Configuration
-public class MvcConfig extends WebMvcConfigurationSupport {
+public class MvcConfig implements WebMvcConfigurer {
     @Autowired
     SessionInterceptor sessionInterceptor;
 
     @Override
-    protected void addInterceptors(InterceptorRegistry registry) {
+    public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(sessionInterceptor).addPathPatterns("/**");
-        super.addInterceptors(registry);
     }
 
     /*@Override
