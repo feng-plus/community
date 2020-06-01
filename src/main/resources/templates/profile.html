@@ -5,16 +5,16 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>麻酱社区首页</title>
-    <link rel="stylesheet" href="css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="css/font-awesome.min.css"/>
+    <title th:text="${selectionName}"></title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/css/font-awesome.min.css"/>
 </head>
 <body>
 <div th:replace="nav::navbar"></div>
 <div class="container-fluid m-5 bg-light h-100" >
     <div class="row">
         <div class="col-lg-9 col-md-12 col-sm-12">
-            <h2><i class="fa fa-windows" aria-hidden="true" style="font-size: 30px"></i>发现</h2>
+            <h2 th:text="${selectionName}"><i class="fa fa-windows" aria-hidden="true" style="font-size: 30px"></i>发现</h2>
             <hr>
             <ul class="list-unstyled" >
                 <li class="media" th:each="question:${pagination.questionDTOS}">
@@ -34,30 +34,37 @@
                 <ul class="pagination">
 
                     <li class="page-item" th:if="${pagination.showFirstPage}">
-                        <a href="/?page=1" class="page-link">&laquo;</a>
+                        <a th:href="@{'/profile/'+${selection}+'?page=1'}" class="page-link">&laquo;</a>
                     </li>
                     <li class="page-item" th:if="${pagination.showPrevious}">
-                         <a th:href="@{'/?page=' + ${pagination.page -1}}" class="page-link" >&lt;</a>
+                        <a th:href="@{'/profile/'+${selection} +'?page=' + ${pagination.page -1}}" class="page-link" >&lt;</a>
                     </li>
                     <li class="page-item" th:each="page:${pagination.pages}" th:classappend="${pagination.page == page}? 'active':''" >
-                        <a th:href="@{'/?page=' + ${page}}" class="page-link" th:text="${page}" ></a>
+                        <a th:href="@{'/profile/'+${selection} + '?page=' + ${page}}" class="page-link" th:text="${page}" ></a>
                     </li>
                     <li class="page-item" th:if="${pagination.showNext}">
-                        <a th:href="@{'/?page=' + ${pagination.page + 1}}" class="page-link" >&gt;</a>
+                        <a th:href="@{'/profile/' + ${selection}+'?page=' + ${pagination.page + 1}}" class="page-link" >&gt;</a>
                     </li>
                     <li class="page-item" th:if="${pagination.showEndPage}">
-                        <a th:href="@{'/?page=' + ${pagination.toltalPage}}" class="page-link" >&raquo;</a>
+                        <a th:href="@{'/profile/'+${selection}+'?page=' + ${pagination.toltalPage}}" class="page-link" >&raquo;</a>
                     </li>
                 </ul>
             </nav>
         </div>
         <div class="col-lg-3 col-md-12 col-sm-12">
-            <h3>问题发起指南</h3>
+            <div class="list-group">
+                <a href="#" class="list-group-item list-group-item-action" th:classappend="${selection == 'questions'}?'active':'' ">我的问题</a>
+                <a href="#" class="list-group-item list-group-item-action" th:classappend="${selection == 'replace'}?'active':'' ">
+                    最新回复
+                    <span class="badge badge-secondary">12</span>
+                </a>
+                <a href="#" class="list-group-item list-group-item-action">ccc</a>
+            </div>
         </div>
     </div>
 </div>
 </body>
-<script src="js/jquery.min.js" type="application/javascript"></script>
-<script src="js/bootstrap.bundle.min.js" type="application/javascript"></script>
+<script src="/js/jquery.min.js" type="application/javascript"></script>
+<script src="/js/bootstrap.bundle.min.js" type="application/javascript"></script>
 
 </html>

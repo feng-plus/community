@@ -27,22 +27,29 @@ public class QuesionService {
         //容错处理
         PaginationDTO pagination = new PaginationDTO();
         Integer toltalCount = questionMapper.count();
-        pagination.setPaginations(toltalCount,page,size);
+
+        Integer toltalPage;
+        if(toltalCount%size==0){
+            toltalPage = toltalCount/size;
+        }else{
+            toltalPage = toltalCount/size + 1 ;
+        }
         if(page < 1 ){
             page = 1;
         }
-        if(page > pagination.getToltalPage()){
-            page = pagination.getToltalPage();
+        if(page > toltalPage){
+            page = toltalPage;
         }
-        Integer offset = size*(page - 1);
+        pagination.setPaginations(toltalPage,page);
 
+        Integer offset = size*(page - 1);
         List<Question> questions =  questionMapper.list(offset,size);
         List<QuestionDTO> questionDTOS = new ArrayList<QuestionDTO>();
         for(Question question : questions){
            User user = userMapper.findById(question.getCreator());
            QuestionDTO questionDTO = new QuestionDTO();
             questionDTO.setUser(user);
-            System.out.println(questionDTO.toString());
+            //System.out.println(questionDTO.toString());
            //赋值question属性值到questionDTO
            BeanUtils.copyProperties(question,questionDTO);
            questionDTOS.add(questionDTO);
@@ -51,5 +58,51 @@ public class QuesionService {
 
        //Integer
         return pagination;
+    }
+
+    public PaginationDTO list(Integer userId, Integer page, Integer size) {
+        //offset = page -1
+        //容错处理
+        PaginationDTO pagination = new PaginationDTO();
+        Integer toltalCount = questionMapper.countByUserId(userId);
+        Integer toltalPage;
+        if(toltalCount%size==0){
+            toltalPage = toltalCount/size;
+        }else{
+            toltalPage = toltalCount/size + 1 ;
+        }
+        if(page < 1 ){
+            page = 1;
+        }
+        if(page > toltalPage){
+            page = toltalPage;
+        }
+        pagination.setPaginations(toltalPage,page);
+        Integer offset = size*(page - 1);
+
+        List<Question> questions =  questionMapper.listByUserId(userId,offset,size);
+        List<QuestionDTO> questionDTOS = new ArrayList<QuestionDTO>();
+        for(Question question : questions){
+            User user = userMapper.findById(question.getCreator());
+            QuestionDTO questionDTO = new QuestionDTO();
+            questionDTO.setUser(user);
+            //System.out.println(questionDTO.toString());
+            //赋值question属性值到questionDTO
+            BeanUtils.copyProperties(question,questionDTO);
+            questionDTOS.add(questionDTO);
+        }
+        pagination.setQuestionDTOS(questionDTOS);
+
+        //Integer
+        return pagination;
+    }
+
+    public QuestionDTO getById(Integer id) {
+        Question question = questionMapper.getById(id);
+        QuestionDTO questionDTO = new QuestionDTO();
+        BeanUtils.copyProperties(question,questionDTO);
+        User user = userMapper.findById(question.getCreator());
+        questionDTO.setUser(user);
+        return questionDTO;
     }
 }

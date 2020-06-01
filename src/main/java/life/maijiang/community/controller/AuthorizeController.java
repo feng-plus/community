@@ -6,6 +6,7 @@ import life.maijiang.community.dto.GithubUser;
 import life.maijiang.community.mapper.UserMapper;
 import life.maijiang.community.model.User;
 import life.maijiang.community.provider.GithubProvider;
+import life.maijiang.community.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -13,7 +14,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.GroupSequence;
 import java.util.UUID;
 
 @Controller
@@ -21,9 +24,9 @@ public class AuthorizeController {
     @Autowired
     GithubProvider githubProvider;
 
-    @Autowired
-    UserMapper userMapper;
 
+    @Autowired
+    UserService userService;
     @Value("${github.client.id}")
     String clientId;
     @Value("${github.client.secret}")
@@ -53,14 +56,29 @@ public class AuthorizeController {
             user.setName(githubUser.getName());
             user.setToken(UUID.randomUUID().toString());
             user.setAvatarUrl(githubUser.getAvatar_url());
-            user.setGmtCreate(System.currentTimeMillis());
-            user.setGmtModified(System.currentTimeMillis());
-            userMapper.insert(user);
+            userService.createOrUpdate(user);
             //将Token存储到前端cookie,用于作为登录状态判断
             response.addCookie(new Cookie("token",user.getToken()));
             return "redirect:/";
         }else{
             return "redirect:/";
         }
+    }
+
+    /**
+     * 退出功能
+     * @return
+     */
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request,
+                         HttpServletResponse response){
+        //移除session
+        request.getSession().removeAttribute("githubUser");
+        //移除Cookie方法
+        Cookie newCookie = new Cookie("token",null);
+        newCookie.setMaxAge(1);
+        response.addCookie(newCookie);
+
+        return "redirect:/";
     }
 }

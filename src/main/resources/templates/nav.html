@@ -37,10 +37,10 @@
                             <button class="nav-link btn dropdown-toggle" data-toggle="dropdown"
                                     th:text="${session.githubUser.getName()}  " style="font-size: 20px">我
                             </button>
-                            <div class="dropdown-menu show">
-                                <a href="#" class="dropdown-item">我的问题</a>
-                                <a href="#" class="dropdown-item">我的提问</a>
-                                <a href="#" class="dropdown-item">我的关注</a>
+                            <div class="dropdown-menu">
+                                <a href="/profile/questions" class="dropdown-item">我的问题</a>
+                                <a href="/profile/replies" class="dropdown-item">最新回复</a>
+                                <a href="/logout" class="dropdown-item">退出登录</a>
                             </div>
                         </div>
                     </li>

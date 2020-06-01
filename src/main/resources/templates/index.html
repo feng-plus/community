@@ -20,11 +20,13 @@
                 <li class="media" th:each="question:${pagination.questionDTOS}">
                     <img  th:src="${question.user.avatarUrl}" class="mr-3" width="64">
                     <div class="media-body">
-                        <h5 class="mt-0" th:text="${question.title}">标题</h5>
+                        <h5 class="mt-0">
+                            <a th:href="@{'/question/'+${question.id}}" th:text="${question.title}"></a>
+                        </h5>
                         <p th:text="${question.description}"></p>
                         <span>
-                            <span th:text="${question.commentCount}"></span>个回复.
-                            <span th:text="${question.viewCount}"></span>次浏览.
+                            <span th:text="${question.commentCount}"></span>个回复.|
+                            <span th:text="${question.viewCount}"></span>次浏览.|
                             <span th:text="${#dates.format(question.gmtCreate, 'yyyy-MM-dd HH:mm:ss')}"></span> 小时前
                         </span>
                     </div>
