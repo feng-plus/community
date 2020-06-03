@@ -1,0 +1,30 @@
+<!--注意：引入thymeleaf的名称空间-->
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>麻酱社区首页</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/css/font-awesome.min.css"/>
+</head>
+<body>
+<div th:replace="nav::navbar"></div>
+<div class="container-fluid m-5 bg-light h-100" >
+    <div class="row">
+       <div class="jumbotron">
+           <h1 class="display-3">出错了</h1>
+           <p class="lead" th:text="${message}">服务器太热了，待会重试</p>
+           <p class="lead">
+               <a href="/" class="btn btn-primary btn-lg">回到麻酱</a>
+           </p>
+
+       </div>
+    </div>
+</div>
+</body>
+<script src="/js/jquery.min.js" type="application/javascript"></script>
+<script src="/js/bootstrap.bundle.min.js" type="application/javascript"></script>
+
+</html>
