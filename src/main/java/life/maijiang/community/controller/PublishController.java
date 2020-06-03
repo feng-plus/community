@@ -1,12 +1,16 @@
 package life.maijiang.community.controller;
 
+import life.maijiang.community.dto.QuestionDTO;
 import life.maijiang.community.mapper.QuestionMapper;
 import life.maijiang.community.model.Question;
 import life.maijiang.community.model.User;
+import life.maijiang.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -15,7 +19,18 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 public class PublishController {
     @Autowired
-    QuestionMapper questionMapper;
+    QuestionService questionService;
+
+    @GetMapping("/publish/{id}")
+    public String edit(@PathVariable(name="id")Integer id,
+                       Model model){
+        QuestionDTO questionDTO = questionService.getById(id);
+        model.addAttribute("title",questionDTO.getTitle());
+        model.addAttribute("description",questionDTO.getDescription());
+        model.addAttribute("tag",questionDTO.getTag());
+        model.addAttribute("id",questionDTO.getId());
+        return "publish";
+    }
 
     @GetMapping("/publish")
     public String publish(){
@@ -23,9 +38,10 @@ public class PublishController {
     }
 
     @PostMapping("/publish")
-    public String doPublish(@RequestParam("title") String title,
-                            @RequestParam("description") String  description,
-                            @RequestParam("tag") String tag ,
+    public String doPublish(@RequestParam(name="title",required = false) String title,
+                            @RequestParam(name="description",required = false) String  description,
+                            @RequestParam(name="tag",required = false) String tag ,
+                            @RequestParam(name="id",required = false) Integer id ,
                             HttpServletRequest request,
                             Model model){
         System.out.println("执行了发布功能");
@@ -49,8 +65,8 @@ public class PublishController {
         question.setTitle(title);
         question.setDescription(description);
         question.setTag(tag);
-        question.setGmtCreate(System.currentTimeMillis());
-        question.setGmtModified(System.currentTimeMillis());
+        question.setId(id);
+
         //获取用户信息
         User user =(User)request.getSession().getAttribute("githubUser");
         if(user == null){
@@ -59,8 +75,9 @@ public class PublishController {
         }
         //将id赋值给creator
         question.setCreator(user.getId());
-        //执行新增操作
-        questionMapper.create(question);
+        //执行新增操作或者修改
+        questionService.createOrUpdate(question);
+        //questionMapper.create(question);
         return "redirect:/";
     }
 

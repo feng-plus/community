@@ -48,6 +48,8 @@ public class AuthorizeController {
         String accessToken = githubProvider.getAccessToken(accessTokenDTO);
         //携带access_toke发起get请求
         GithubUser githubUser = githubProvider.getGithubUser(accessToken);
+
+        System.out.println(githubUser);
         //将得到的用户信息存入session
         if(githubUser != null && githubUser.getId() != null){
             //创建用户，存入数据库

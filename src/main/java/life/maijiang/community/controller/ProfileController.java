@@ -3,7 +3,7 @@ package life.maijiang.community.controller;
 
 import life.maijiang.community.dto.PaginationDTO;
 import life.maijiang.community.model.User;
-import life.maijiang.community.service.QuesionService;
+import life.maijiang.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,7 +16,7 @@ import javax.servlet.http.HttpSession;
 @Controller
 public class ProfileController {
     @Autowired
-    QuesionService questionService;
+    QuestionService questionService;
 
     @GetMapping("/profile/{action}")
     public String profile(@PathVariable(name="action")String action,

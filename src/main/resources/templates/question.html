@@ -28,7 +28,7 @@
             </div>
             <hr>
             <span th:if="${session.githubUser !=null && session.githubUser.id == question.creator}">
-                <a class="edit" th:href="@{'/question/'+${question.id}}"><i class="fa fa-pencil-square" aria-hidden="true"></i>编辑</a>
+                <a class="edit" th:href="@{'/publish/'+${question.id}}"><i class="fa fa-pencil-square" aria-hidden="true"></i>编辑</a>
             </span>
         </div>
         <div class="col-lg-3 col-md-12 col-sm-12">
