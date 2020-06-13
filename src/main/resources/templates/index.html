@@ -61,5 +61,12 @@
 </body>
 <script src="js/jquery.min.js" type="application/javascript"></script>
 <script src="js/bootstrap.bundle.min.js" type="application/javascript"></script>
-
+<script type="application/javascript">
+    window.onload(function () {
+        if(window.localStorage.getItem("closeable")){
+            window.close();
+            window.localStorage.clear();
+        }
+    })
+</script>
 </html>

@@ -27,12 +27,14 @@ public class SessionInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         //获取当前用户cookie信息
         Cookie[] cookies = request.getCookies();
+
         if(cookies != null && cookies.length != 0){
             //遍历cookie
             for (Cookie cookie : cookies) {
                 if("token".equals(cookie.getName())){
                     //根据name获取value
                     String token = cookie.getValue();
+                    //System.out.println(token);
                     //然后根据token查询用户信息
                     UserExample userExample = new UserExample();
                     userExample.createCriteria().andTokenEqualTo(token);

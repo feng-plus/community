@@ -35,6 +35,9 @@
         </table>
         <table tableName="QUESTION" domainObjectName="Question" >
         </table>
-
+        <table tableName="COMMENT" domainObjectName="Comment" >
+        </table>
+        <table tableName="NOTIFICATION" domainObjectName="Notification" >
+        </table>
     </context>
 </generatorConfiguration>

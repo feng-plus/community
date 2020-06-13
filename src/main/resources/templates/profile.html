@@ -20,12 +20,18 @@
                 <li class="media" th:each="question:${pagination.questionDTOS}">
                     <img  th:src="${question.user.avatarUrl}" class="mr-3" width="64">
                     <div class="media-body">
-                        <h5 class="mt-0" th:text="${question.title}">标题</h5>
+                        <h5 class="mt-0">
+                            <a th:href="@{'/question/'+${question.id}}" th:text="${question.title}"></a>
+                        </h5>
                         <p th:text="${question.description}"></p>
                         <span>
                             <span th:text="${question.commentCount}"></span>个回复.
                             <span th:text="${question.viewCount}"></span>次浏览.
                             <span th:text="${#dates.format(question.gmtCreate, 'yyyy-MM-dd HH:mm:ss')}"></span> 小时前
+                        </span>
+                        <span th:if="${session.githubUser !=null && session.githubUser.id == question.creator}">
+                                  <a class="edit" th:href="@{'/publish/'+${question.id}}"><i class="fa fa-pencil-square"
+                                                                                             aria-hidden="true"></i>编辑</a>
                         </span>
                     </div>
                 </li>
@@ -53,8 +59,8 @@
         </div>
         <div class="col-lg-3 col-md-12 col-sm-12">
             <div class="list-group">
-                <a href="#" class="list-group-item list-group-item-action" th:classappend="${selection == 'questions'}?'active':'' ">我的问题</a>
-                <a href="#" class="list-group-item list-group-item-action" th:classappend="${selection == 'replace'}?'active':'' ">
+                <a href="/profile/questions" class="list-group-item list-group-item-action" th:classappend="${selection == 'questions'} ? 'active':'' ">我的问题</a>
+                <a href="/profile/replies" class="list-group-item list-group-item-action" th:classappend="${selection == 'replies'} ? 'active':'' ">
                     最新回复
                     <span class="badge badge-secondary">12</span>
                 </a>

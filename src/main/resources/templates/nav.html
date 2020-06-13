@@ -27,6 +27,15 @@
                         <a href="https://github.com/login/oauth/authorize?client_id=84992e10b66d7c1c488e&redirect_uri=http://localhost:8887/callback&state=1" class="nav-link btn-primary mr-5" style="font-size: 20px">登录</a>
                     </li>
                     <li class="nav-item mr-1" th:if="${session.githubUser ne null}">
+                        <a href="/profile/replies" class="nav-link">
+
+                            <span class="badge badge-light" style="font-size:20px">
+                                <i class="fa fa-clock-o" aria-hidden="true" >通知</i>
+                                <i style="color:#F00">6</i>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="nav-item mr-1" th:if="${session.githubUser ne null}">
                         <a href="/publish" class="nav-link">
                             <i class="fa fa-plus-square" aria-hidden="true" style="font-size:20px;color:#F00;"></i>
                             <span style="font-size:20px;">发起</span>
@@ -39,7 +48,6 @@
                             </button>
                             <div class="dropdown-menu">
                                 <a href="/profile/questions" class="dropdown-item">我的问题</a>
-                                <a href="/profile/replies" class="dropdown-item">最新回复</a>
                                 <a href="/logout" class="dropdown-item">退出登录</a>
                             </div>
                         </div>

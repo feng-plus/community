@@ -4,23 +4,30 @@ import life.maijiang.community.Exception.CustomizeErrorCode;
 import life.maijiang.community.Exception.CustomizeException;
 import life.maijiang.community.dto.PaginationDTO;
 import life.maijiang.community.dto.QuestionDTO;
+import life.maijiang.community.mapper.QuestionExtMapper;
 import life.maijiang.community.mapper.QuestionMapper;
 import life.maijiang.community.mapper.UserMapper;
 import life.maijiang.community.model.Question;
 import life.maijiang.community.model.QuestionExample;
 import life.maijiang.community.model.User;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class QuestionService {
     @Autowired
     QuestionMapper questionMapper;
+
+    @Autowired
+    QuestionExtMapper questionExtMapper;
 
     @Autowired
     UserMapper userMapper;
@@ -49,7 +56,9 @@ public class QuestionService {
 
         Integer offset = size*(page - 1);
         //List<Question> questions =  questionMapper.list(offset,size);
-        List<Question> questions = questionMapper.selectByExampleWithRowbounds(new QuestionExample(), new RowBounds(offset, size));
+        QuestionExample example = new QuestionExample();
+        example.setOrderByClause("gmt_create desc");
+        List<Question> questions = questionMapper.selectByExampleWithRowbounds(example, new RowBounds(offset, size));
         List<QuestionDTO> questionDTOS = new ArrayList<QuestionDTO>();
         for(Question question : questions){
            User user = userMapper.selectByPrimaryKey(question.getCreator());
@@ -66,7 +75,7 @@ public class QuestionService {
         return pagination;
     }
 
-    public PaginationDTO list(Integer userId, Integer page, Integer size) {
+    public PaginationDTO list(Long userId, Integer page, Integer size) {
         //offset = page -1
         //容错处理
         PaginationDTO pagination = new PaginationDTO();
@@ -108,7 +117,7 @@ public class QuestionService {
         return pagination;
     }
 
-    public QuestionDTO getById(Integer id) {
+    public QuestionDTO getById(Long id) {
         //Question question = questionMapper.getById(id);
         Question question = questionMapper.selectByPrimaryKey(id);
         if(question == null){
@@ -127,6 +136,9 @@ public class QuestionService {
             System.out.println("新增提问");
             question.setGmtCreate(System.currentTimeMillis());
             question.setGmtModified(System.currentTimeMillis());
+            question.setLikeCount(0);
+            question.setViewCount(0);
+            question.setCommentCount(0);
             //questionMapper.create(question);
             questionMapper.insert(question);
         }else{
@@ -146,5 +158,33 @@ public class QuestionService {
                 throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
             }
         }
+    }
+
+    public void inView(Long id) {
+        Question updateQuestion = new Question();
+        updateQuestion.setId(id);
+        updateQuestion.setViewCount(1);
+        questionExtMapper.incView(updateQuestion);
+    }
+
+    public List<QuestionDTO> selectRelated(QuestionDTO queryDTO) {
+        if(StringUtils.isBlank(queryDTO.getTag())){
+            return new ArrayList<>();
+        }
+        String[] split = StringUtils.split(queryDTO.getTag(), ',');
+        String regexpTag = Arrays.stream(split).collect(Collectors.joining("|"));
+        System.out.println(regexpTag);
+        Question question = new Question();
+        question.setId(queryDTO.getId());
+        question.setTag(regexpTag);
+
+        List<Question> questions = questionExtMapper.selectRelated(question);
+        List<QuestionDTO> questionDTOs = questions.stream().map(question1 -> {
+            QuestionDTO questionDTO = new QuestionDTO();
+            BeanUtils.copyProperties(question1,questionDTO);
+            return questionDTO;
+        }).collect(Collectors.toList());
+
+        return questionDTOs;
     }
 }

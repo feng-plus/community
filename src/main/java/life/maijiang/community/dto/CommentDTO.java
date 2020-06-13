@@ -4,17 +4,16 @@ import life.maijiang.community.model.User;
 import lombok.Data;
 
 @Data
-public class QuestionDTO {
+public class CommentDTO {
     private Long id;
-    private String title;
-    private String description;
+    private Long parentId;
+    private Integer type;
+    private Long commentator;
     private Long gmtCreate;
     private Long gmtModified;
-    private Long creator;
+    private Long likeCount;
+    private String content;
     private Integer commentCount;
-    private Integer viewCount;
-    private Integer likeCount;
-    private String tag;
     private User user;
 
 }
