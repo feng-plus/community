@@ -36,7 +36,7 @@ public class QuestionService {
     public PaginationDTO list(Integer page, Integer size){
         //offset = page -1
         //容错处理
-        PaginationDTO pagination = new PaginationDTO();
+        PaginationDTO<QuestionDTO> pagination = new PaginationDTO<QuestionDTO>();
 
         //questionMapper.count();
         Integer toltalCount =(int)questionMapper.countByExample(new QuestionExample());
@@ -69,7 +69,7 @@ public class QuestionService {
            BeanUtils.copyProperties(question,questionDTO);
            questionDTOS.add(questionDTO);
         }
-        pagination.setQuestionDTOS(questionDTOS);
+        pagination.setData(questionDTOS);
 
        //Integer
         return pagination;
@@ -111,7 +111,7 @@ public class QuestionService {
             BeanUtils.copyProperties(question,questionDTO);
             questionDTOS.add(questionDTO);
         }
-        pagination.setQuestionDTOS(questionDTOS);
+        pagination.setData(questionDTOS);
 
         //Integer
         return pagination;

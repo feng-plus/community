@@ -10,7 +10,7 @@
         <div class="container-fluid">
             <!--<span class="navbar-brand h1 mb-0">网战天下</span>-->
             <a href="/" class="navbar-brand">
-                <img src="images/logo.png" class="d-inline-block align-top" style="width: 30px;height: 30px">
+                <img src="/images/logo.png" class="d-inline-block align-top" style="width: 30px;height: 30px">
                 <p class="d-inline-block">麻酱社区</p>
             </a>
             <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarNav">
@@ -31,7 +31,7 @@
 
                             <span class="badge badge-light" style="font-size:20px">
                                 <i class="fa fa-clock-o" aria-hidden="true" >通知</i>
-                                <i style="color:#F00">6</i>
+                                <i style="color:#F00" th:text="${session.unReadCount}">0</i>
                             </span>
                         </a>
                     </li>

@@ -3,6 +3,7 @@ package life.maijiang.community.controller;
 
 import life.maijiang.community.dto.PaginationDTO;
 import life.maijiang.community.model.User;
+import life.maijiang.community.service.NotificationService;
 import life.maijiang.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,6 +19,9 @@ public class ProfileController {
     @Autowired
     QuestionService questionService;
 
+    @Autowired
+    NotificationService notificationService;
+
     @GetMapping("/profile/{action}")
     public String profile(@PathVariable(name="action")String action,
                           @RequestParam(name="page",defaultValue = "1")Integer page,
@@ -26,14 +30,17 @@ public class ProfileController {
                           HttpSession session){
         User user = (User)session.getAttribute("githubUser");
         if("questions".equals(action)){
+           PaginationDTO paginationDTO = questionService.list(user.getId(),page,size);
+           model.addAttribute("pagination",paginationDTO);
            model.addAttribute("selection","questions");
            model.addAttribute("selectionName","我的提问");
         }else if("replies".equals(action)){
+            PaginationDTO paginationDTO = notificationService.list(user.getId(),page,size);
+            model.addAttribute("pagination",paginationDTO);
             model.addAttribute("selection","replies");
             model.addAttribute("selectionName","最新回复");
         }
-        PaginationDTO paginationDTO = questionService.list(user.getId(),page,size);
-        model.addAttribute("pagination",paginationDTO);
+
         return "profile";
     }
 }

@@ -17,7 +17,7 @@
             <h2><i class="fa fa-windows" aria-hidden="true" style="font-size: 30px"></i>发现</h2>
             <hr>
             <ul class="list-unstyled" >
-                <li class="media" th:each="question:${pagination.questionDTOS}">
+                <li class="media" th:each="question:${pagination.data}">
                     <img  th:src="${question.user.avatarUrl}" class="mr-3" width="64">
                     <div class="media-body">
                         <h5 class="mt-0">

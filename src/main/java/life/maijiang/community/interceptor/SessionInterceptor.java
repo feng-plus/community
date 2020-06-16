@@ -4,6 +4,7 @@ package life.maijiang.community.interceptor;
 import life.maijiang.community.mapper.UserMapper;
 import life.maijiang.community.model.User;
 import life.maijiang.community.model.UserExample;
+import life.maijiang.community.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -22,6 +23,9 @@ public class SessionInterceptor implements HandlerInterceptor {
 
     @Autowired
     UserMapper userMapper;
+
+    @Autowired
+    NotificationService notificationService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -42,6 +46,8 @@ public class SessionInterceptor implements HandlerInterceptor {
                     if(users.size() != 0){
                         //将用户信息存入session
                         request.getSession().setAttribute("githubUser",users.get(0));
+                        Long unreadCount = notificationService.unreadCount(users.get(0).getId());
+                        request.getSession().setAttribute("unReadCount",unreadCount);
                     }
                     break;
                 }

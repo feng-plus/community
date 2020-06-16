@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="/css/font-awesome.min.css"/>
     <link rel="stylesheet" href="/css/community.css"/>
+    <link rel="stylesheet" href="/css/editormd.preview.min.css"/>
 </head>
 <body>
 <div th:replace="nav::navbar"></div>
@@ -25,8 +26,8 @@
                 阅读数:  <span th:text="${question.viewCount}"></span>
                 </span>
                 <hr>
-                <div class="col-lg-12 col-md-12 col-sm-12">
-                    <p th:text="${question.description}"></p>
+                <div class="col-lg-12 col-md-12 col-sm-12" id="question-view">
+                    <textarea style="display: none" th:text="${question.description}"></textarea>
                 </div>
                 <hr>
                 <div class="col-lg-12 col-md-12 col-sm-12">
@@ -146,5 +147,14 @@
 <script src="/js/bootstrap.bundle.min.js" type="application/javascript"></script>
 <script src="/js/community.js" type="application/javascript"></script>
 <script src="/js/moment.js" type="application/javascript"></script>
-
+<script src="/js/editormd.min.js" type="application/javascript"></script>
+<script type="text/javascript">
+    $(function() {
+        var testView = editormd.markdownToHTML("question-view", {
+            // markdown : "[TOC]\n### Hello world!\n## Heading 2", // Also, you can dynamic set Markdown text
+            // htmlDecode : true,  // Enable / disable HTML tag encode.
+            // htmlDecode : "style,script,iframe",  // Note: If enabled, you should filter some dangerous HTML tags for website security.
+        });
+    });
+</script>
 </html>
