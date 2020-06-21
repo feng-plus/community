@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="/css/font-awesome.min.css"/>
     <link rel="stylesheet" href="/css/editormd.min.css"/>
+    <script src="/js/jquery.min.js" type="application/javascript"></script>
 </head>
 <body class="bg-secondary">
 <div th:replace="nav::navbar"></div>
@@ -65,9 +66,10 @@
        </div>
    </div>
 </div>
+<div th:replace="footer::foot"></div>
 
 </body>
-<script src="/js/jquery.min.js" type="application/javascript"></script>
+
 <script src="/js/bootstrap.bundle.min.js" type="application/javascript"></script>
 <script src="/js/community.js" type="application/javascript"></script>
 <script src="/js/editormd.min.js" type="application/javascript"></script>
@@ -99,7 +101,10 @@
             path   : "/js/lib/",
             delay                : 0,
             watch  : false,
-            placeholder          : "请输入你需要输入的内容"
+            placeholder          : "请输入你需要输入的内容",
+            imageUpload    : true,
+            imageFormats   : ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+            imageUploadURL : "./php/upload.php"
 
         });
     });

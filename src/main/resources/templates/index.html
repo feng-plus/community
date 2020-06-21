@@ -36,19 +36,19 @@
                 <ul class="pagination">
 
                     <li class="page-item" th:if="${pagination.showFirstPage}">
-                        <a href="/?page=1" class="page-link">&laquo;</a>
+                        <a th:href="@{/(page=1,search=${search})}" class="page-link">&laquo;</a>
                     </li>
                     <li class="page-item" th:if="${pagination.showPrevious}">
-                         <a th:href="@{'/?page=' + ${pagination.page -1}}" class="page-link" >&lt;</a>
+                         <a th:href="@{/(page= ${pagination.page -1},search=${search})}" class="page-link" >&lt;</a>
                     </li>
                     <li class="page-item" th:each="page:${pagination.pages}" th:classappend="${pagination.page == page}? 'active':''" >
-                        <a th:href="@{'/?page=' + ${page}}" class="page-link" th:text="${page}" ></a>
+                        <a th:href="@{/(page = ${page},search=${search})}" class="page-link" th:text="${page}" ></a>
                     </li>
                     <li class="page-item" th:if="${pagination.showNext}">
-                        <a th:href="@{'/?page=' + ${pagination.page + 1}}" class="page-link" >&gt;</a>
+                        <a th:href="@{/(page = ${pagination.page + 1},search=${search})}" class="page-link" >&gt;</a>
                     </li>
                     <li class="page-item" th:if="${pagination.showEndPage}">
-                        <a th:href="@{'/?page=' + ${pagination.toltalPage}}" class="page-link" >&raquo;</a>
+                        <a th:href="@{/(page =${pagination.toltalPage},search=${search})}" class="page-link" >&raquo;</a>
                     </li>
                 </ul>
             </nav>
@@ -58,6 +58,7 @@
         </div>
     </div>
 </div>
+<div th:replace="footer::foot"></div>
 </body>
 <script src="js/jquery.min.js" type="application/javascript"></script>
 <script src="js/bootstrap.bundle.min.js" type="application/javascript"></script>

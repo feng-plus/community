@@ -4,6 +4,7 @@ import life.maijiang.community.Exception.CustomizeErrorCode;
 import life.maijiang.community.Exception.CustomizeException;
 import life.maijiang.community.dto.PaginationDTO;
 import life.maijiang.community.dto.QuestionDTO;
+import life.maijiang.community.dto.QuestionQueryDTO;
 import life.maijiang.community.mapper.QuestionExtMapper;
 import life.maijiang.community.mapper.QuestionMapper;
 import life.maijiang.community.mapper.UserMapper;
@@ -33,13 +34,25 @@ public class QuestionService {
     UserMapper userMapper;
 
 
-    public PaginationDTO list(Integer page, Integer size){
+    public PaginationDTO list(String search,Integer page, Integer size){
+        if(StringUtils.isNotBlank(search)){
+            String[] split = StringUtils.split(search, ' ');
+            search = Arrays.stream(split).collect(Collectors.joining("|"));
+        }
+
         //offset = page -1
         //容错处理
         PaginationDTO<QuestionDTO> pagination = new PaginationDTO<QuestionDTO>();
 
         //questionMapper.count();
-        Integer toltalCount =(int)questionMapper.countByExample(new QuestionExample());
+
+        //QuestionExample questionExample = new QuestionExample();
+        //questionExample.createCriteria().andTitleLike(search);
+        //Integer toltalCount =(int)questionMapper.countByExample(questionExample);
+        QuestionQueryDTO questionQueryDTO = new QuestionQueryDTO();
+        questionQueryDTO.setSearch(search);
+        Integer toltalCount =questionExtMapper.countBySreach(questionQueryDTO);
+
         Integer toltalPage;
         if(toltalCount%size==0){
             toltalPage = toltalCount/size;
@@ -56,9 +69,15 @@ public class QuestionService {
 
         Integer offset = size*(page - 1);
         //List<Question> questions =  questionMapper.list(offset,size);
-        QuestionExample example = new QuestionExample();
-        example.setOrderByClause("gmt_create desc");
-        List<Question> questions = questionMapper.selectByExampleWithRowbounds(example, new RowBounds(offset, size));
+        //QuestionExample example = new QuestionExample();
+        //example.createCriteria().andTitleLike(search);
+        //example.setOrderByClause("gmt_create desc");
+        //List<Question> questions = questionMapper.selectByExampleWithRowbounds(example, new RowBounds(offset, size));
+        QuestionQueryDTO questionQueryDTO1 = new QuestionQueryDTO();
+        questionQueryDTO1.setSearch(search);
+        questionQueryDTO1.setPage(page);
+        questionQueryDTO1.setSize(size);
+        List<Question> questions = questionExtMapper.selectBySearch(questionQueryDTO1);
         List<QuestionDTO> questionDTOS = new ArrayList<QuestionDTO>();
         for(Question question : questions){
            User user = userMapper.selectByPrimaryKey(question.getCreator());
@@ -75,12 +94,13 @@ public class QuestionService {
         return pagination;
     }
 
-    public PaginationDTO list(Long userId, Integer page, Integer size) {
+    public PaginationDTO list(String search,Long userId, Integer page, Integer size) {
         //offset = page -1
         //容错处理
         PaginationDTO pagination = new PaginationDTO();
         QuestionExample example = new QuestionExample();
-        example.createCriteria().andCreatorEqualTo(userId);
+        example.createCriteria().andCreatorEqualTo(userId)
+        .andTitleLike(search);
         Integer toltalCount =(int)questionMapper.countByExample(new QuestionExample());
         //Integer toltalCount = questionMapper.countByUserId(userId);
         Integer toltalPage;
@@ -98,7 +118,7 @@ public class QuestionService {
         pagination.setPaginations(toltalPage,page);
         Integer offset = size*(page - 1);
         QuestionExample example1 = new QuestionExample();
-        example.createCriteria().andCreatorEqualTo(userId);
+        example.createCriteria().andCreatorEqualTo(userId).andTitleLike(search);
         List<Question> questions = questionMapper.selectByExampleWithRowbounds(example1, new RowBounds(offset, size));
         //<Question> questions =  questionMapper.listByUserId(userId,offset,size);
         List<QuestionDTO> questionDTOS = new ArrayList<QuestionDTO>();

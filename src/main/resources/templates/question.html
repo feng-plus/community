@@ -102,10 +102,10 @@
 
                 <ul class="list-unstyled" >
                     <li class="media">
-                        <img  th:src="${question.user.avatarUrl}" class="mr-3" width="64">
+                        <img  th:src="${session.githubUser!=null? session.githubUser.avatarUrl : '/images/default-avatar.png'}" class="mr-3" width="64">
                         <div class="media-body">
                             <h6 class="mt-0">
-                                <span th:text="${question.user.name}"></span>
+                                <span th:text="${session.githubUser!=null?session.githubUser.name:'尼玛用户'}"></span>
                             </h6>
                         </div>
                     </li>
@@ -142,12 +142,15 @@
         </div>
     </div>
 </div>
+<div th:replace="footer::foot"></div>
 </body>
 <script src="/js/jquery.min.js" type="application/javascript"></script>
 <script src="/js/bootstrap.bundle.min.js" type="application/javascript"></script>
 <script src="/js/community.js" type="application/javascript"></script>
 <script src="/js/moment.js" type="application/javascript"></script>
 <script src="/js/editormd.min.js" type="application/javascript"></script>
+<script src="/js/lib/marked.min.js"></script>
+<script src="/js/lib/prettify.min.js"></script>
 <script type="text/javascript">
     $(function() {
         var testView = editormd.markdownToHTML("question-view", {

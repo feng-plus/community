@@ -27,10 +27,11 @@ public class ProfileController {
                           @RequestParam(name="page",defaultValue = "1")Integer page,
                           @RequestParam(name="size",defaultValue = "5")Integer size,
                           Model model,
-                          HttpSession session){
+                          HttpSession session,
+                          @RequestParam(name="search",required = false)String search){
         User user = (User)session.getAttribute("githubUser");
         if("questions".equals(action)){
-           PaginationDTO paginationDTO = questionService.list(user.getId(),page,size);
+           PaginationDTO paginationDTO = questionService.list(search,user.getId(),page,size);
            model.addAttribute("pagination",paginationDTO);
            model.addAttribute("selection","questions");
            model.addAttribute("selectionName","我的提问");

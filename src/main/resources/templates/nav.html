@@ -18,9 +18,9 @@
             </button>
 
             <div class="collapse navbar-collapse" id="navbarNav">
-                <form action="" class="form-inline ml-5">
-                    <input type="text" class="form-control mr-sm-2" placeholder="请输入关键字">
-                    <button class="btn btn-outline-success my-2 my-md-0">搜索</button>
+                <form class="form-inline ml-5" action="/" method="get">
+                    <input name="search" type="text" class="form-control mr-sm-2" placeholder="请输入关键字">
+                    <button type="submit" class="btn btn-outline-success my-2 my-md-0">搜索</button>
                 </form>
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item" th:if="${session.githubUser eq null}">
