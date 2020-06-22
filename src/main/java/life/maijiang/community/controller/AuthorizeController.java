@@ -7,6 +7,8 @@ import life.maijiang.community.mapper.UserMapper;
 import life.maijiang.community.model.User;
 import life.maijiang.community.provider.GithubProvider;
 import life.maijiang.community.service.UserService;
+import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -20,6 +22,7 @@ import javax.validation.GroupSequence;
 import java.util.UUID;
 
 @Controller
+@Slf4j
 public class AuthorizeController {
     @Autowired
     GithubProvider githubProvider;
@@ -63,6 +66,7 @@ public class AuthorizeController {
             response.addCookie(new Cookie("token",user.getToken()));
             return "redirect:/";
         }else{
+            log.error("call github error {}"+githubUser);
             return "redirect:/";
         }
     }
